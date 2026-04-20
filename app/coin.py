@@ -211,6 +211,7 @@ class Coin:
         if have_crypto < should_pay:
             raise Exception(f"Have not enough crypto on fee account, need {should_pay} have {have_crypto}")
         else:
+            self.initialize_account(self.get_fee_deposit_account('public'))
             fee_deposit_mnemonic = self.get_mnemonic_from_address(self.get_fee_deposit_account('public'))
             mnemonics, _pub_k, _priv_k, fee_deposit_wallet  = TonWallets.from_mnemonics(
                 fee_deposit_mnemonic, 
@@ -226,8 +227,7 @@ class Coin:
                     send_mode=send_mode
                 )) 
                 fee_deposit_seqno  = fee_deposit_seqno + 1
-            self.initialize_account(self.get_fee_deposit_account('public'))
-
+            
             logger.warning('Start sending transactions from the list')
             for transaction in transaction_list:
                 boc = bytes_to_b64str(transaction["message"].to_boc(False))
@@ -274,6 +274,7 @@ class Coin:
         if have_crypto < should_pay_fee:
             raise Exception(f"Have not enough crypto on fee account to cover fees, need {should_pay_fee} have {have_crypto}")
         else:
+            self.initialize_account(self.get_fee_deposit_account('public'))
             fee_deposit_mnemonic = self.get_mnemonic_from_address(self.get_fee_deposit_account('public'))
             mnemonics, _pub_k, _priv_k, fee_deposit_wallet  = TonWallets.from_mnemonics(
                 fee_deposit_mnemonic, 
@@ -299,7 +300,7 @@ class Coin:
                 transaction_list.append(message)
                 fee_deposit_seqno = fee_deposit_seqno + 1
 
-            self.initialize_account(self.get_fee_deposit_account('public'))  
+              
                    
             logger.warning('Start sending transactions from the list')
 
