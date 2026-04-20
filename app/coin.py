@@ -101,7 +101,7 @@ class Coin:
         return fee_
     
     def set_fee_deposit_account(self):
-        self.create_wallet('fee-deposit')
+        self.create_wallet('fee_deposit')
 
     def get_transaction_fee(self, source_addr, dest_addr, amount):
         return config['TON_TRANSACTION_FEE']
