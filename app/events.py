@@ -62,7 +62,7 @@ def log_loop(last_checked_block, check_interval):
                                             walletnotify_shkeeper(config["COIN_SYMBOL"], base64.b64decode(transaction['hash']).hex())
                                         if ((message['destination'] in list_accounts and message['source'] not in list_accounts) and 
                                             ((toncenterapi.get_masterchain_head() - block) < 400)):
-                                            drain_account.delay(config["COIN_SYMBOL"], get_pub_address_by_raw_address(message['destination']))
+                                            drain_account.delay(config["COIN_SYMBOL"], message['destination'])
                     ton_finish_time = time.time()
 
                     # Jetton section
@@ -77,7 +77,7 @@ def log_loop(last_checked_block, check_interval):
                                 if ((transaction['destination'] in list_accounts and 
                                      transaction['source'] not in list_accounts) and 
                                     ((toncenterapi.get_masterchain_head() - block) < 400)):
-                                    drain_account.delay(token, get_pub_address_by_raw_address(transaction['destination']))
+                                    drain_account.delay(token, transaction['destination'])
                    
                     block_ton_time = ton_finish_time - ton_start_time
                     block_jetton_time = time.time() - ton_finish_time

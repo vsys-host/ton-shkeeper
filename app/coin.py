@@ -62,7 +62,7 @@ def get_pub_address_by_raw_address(in_raw_address):
     tries = 3
     for i in range(tries):
         try:
-            pd = Accounts.query.filter_by(raw_address = in_raw_address).first()
+            pd = Accounts.query.filter_by(raw_address = in_raw_address.lower()).first()
         except:
             if i < tries - 1: # i is zero indexed
                 db.session.rollback()
@@ -150,7 +150,6 @@ class Coin:
         amount = self.get_ton_balance(fee_deposit_account)
         return amount
     
-
     def get_account_jetton_balance(self, account):
         amount = self.toncenter.get_account_jetton_balance(account, self.jetton_master_address)
         return amount
@@ -330,7 +329,12 @@ class Coin:
             raise Exception(f"Address {destination} is not valid blockchain address") 
     
         if not is_valid_ton_address(account):
-            raise Exception(f"Address {account} is not valid blockchain address")  
+            raise Exception(f"Address {account} is not valid blockchain address")
+
+        if len(account) > 63:
+            logger.warning(f"Account {account} is in raw format, try to get pub address")
+            account = get_pub_address_by_raw_address(account) 
+            logger.warning(f"Pub address is {account}")
         
         if account == destination:
             logger.warning("Fee-deposit account, skip draining")
