@@ -29,7 +29,7 @@ class Toncenterapi():
         
     def get_block_header(self, 
                          seqno, 
-                         workchain = config["WORKCHAINS"][config["CURRENT_TON_NETWORK"]],
+                         workchain = config['WORKCHAIN'],
                          shard = str(config['SHARD'])):
         response = rq.get(f'{self.api_url}/api/v2/getBlockHeader', 
                           params={'api_key': self.api_key,
@@ -45,7 +45,7 @@ class Toncenterapi():
     
     def get_block_lts(self,
                       seqno,
-                      workchain = config["WORKCHAINS"][config["CURRENT_TON_NETWORK"]],
+                      workchain = config["WORKCHAIN"],
                       shard = str(config['SHARD'])):
         result = self.get_block_header(seqno, workchain, shard)
         if result['ok'] and 'start_lt' in result['result'].keys() and 'end_lt' in result['result'].keys():
@@ -128,7 +128,7 @@ class Toncenterapi():
         
     def get_block_timestamp(self, seqno):
         block = {'seqno': seqno,
-                 'workchain': config["WORKCHAINS"][config["CURRENT_TON_NETWORK"]],
+                 'workchain': config['WORKCHAIN'],
                  'shard': str(config['SHARD']),}
         response = rq.get(f'{self.api_url}/api/v2/getBlockHeader', 
                           params={'api_key': self.api_key,

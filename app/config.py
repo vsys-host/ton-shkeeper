@@ -13,8 +13,8 @@ config = {
     'JETTON_TRANSACTION_NEED_BALANCE': Decimal(os.environ.get('JETTON_TRANSACTION_NEED_BALANCE', '0.05')), # in TON
     'TON_FEE_FACTOR': Decimal(os.environ.get('TON_FEE_FACTOR', '1.4')), # Factor to send more TON to cover storage fee on recepient side, 1.1 means send 10% more TON
     'SHARD':  str(os.environ.get('SHARD', '8000000000000000')),
-    'WORKCHAINS': {'main': '0', 'testnet': '-1'},
-    'EVENTS_MAX_THREADS_NUMBER': int(os.environ.get('EVENTS_MAX_THREADS_NUMBER', '6')),
+    'WORKCHAIN': str(os.environ.get('WORKCHAIN', '-1')), # -1 for masterchain
+    'EVENTS_MAX_THREADS_NUMBER': int(os.environ.get('EVENTS_MAX_THREADS_NUMBER', '3')),
     'EVENTS_MIN_DIFF_TO_RUN_PARALLEL': int(os.environ.get('EVENTS_MIN_DIFF_TO_RUN_PARALLEL', '10')),
     'FULLNODE_TIMEOUT': int(os.environ.get('FULLNODE_TIMEOUT', '60')),
     'CHECK_NEW_BLOCK_EVERY_SECONDS': int(os.environ.get('CHECK_NEW_BLOCK_EVERY_SECONDS', '2')),
