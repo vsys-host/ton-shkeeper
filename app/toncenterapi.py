@@ -106,13 +106,20 @@ class Toncenterapi():
                 raise Exception (f"Cannot get transaction by hash {hash}")            
 
     def get_jetton_transaction_by_hash(self, hash, jetton_master):
-        tx_lt = int(self.get_transaction_by_hash(hash)['lt'])
+        tx_by_hash = self.get_transaction_by_hash(hash)
+        tx_lt = int(tx_by_hash['lt'])
         logger.warning(f"transaction lt - {tx_lt}")
-        tx_list = self.get_all_jetton_txs_by_masterchain_seqno(start_lt=tx_lt-2, end_lt=tx_lt+2, jetton_master=jetton_master)
+        tx_list = self.get_all_jetton_txs_by_masterchain_seqno(start_lt=tx_lt-3, end_lt=tx_lt+3, jetton_master=jetton_master)
 
         for tx in tx_list:
             if base64.b64decode(tx['transaction_hash']).hex() == hash:
                 return tx
+        logger.warning(f"Cannot get jetton transaction by hash {hash}, probably it is outgoing tx, try to get transaction by message hash")
+        message_hash = tx_by_hash['hash']
+        for tx in tx_list:
+            if (tx['trace_id']) == message_hash:
+                return tx
+        raise Exception (f"Cannot get jetton transaction by hash {hash}")
             
     def get_masterchain_block_by_shardchain_block(self, block):
         response = rq.get(f'{self.indexer_url}/api/v3/blocks', 
