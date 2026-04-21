@@ -48,9 +48,11 @@ class Toncenterapi():
                       workchain = config["WORKCHAIN"],
                       shard = str(config['SHARD'])):
         result = self.get_block_header(seqno, workchain, shard)
-        if result['ok'] and 'start_lt' in result['result'].keys() and 'end_lt' in result['result'].keys():
+        result2 = self.get_block_header(seqno + 1, workchain, shard)
+        if result['ok'] and 'start_lt' in result['result'].keys():
             start_lt = result['result']['start_lt']
-            end_lt = result['result']['end_lt']
+        if result2['ok'] and 'start_lt' in result2['result'].keys():
+            end_lt = result2['result']['start_lt']
             return {'start_lt': start_lt, 'end_lt': end_lt}
         else:            
             raise Exception (f"Cannot get block lts in {result}")
