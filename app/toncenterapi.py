@@ -90,7 +90,20 @@ class Toncenterapi():
                                   },
                           headers = self.headers)
         response.raise_for_status()
-        return response.json()['transactions'][0]
+        if len(response.json()['transactions']) != 0:
+            return response.json()['transactions'][0]
+        else:
+            logger.warning(f"Cannot get transaction by hash {hash}, try to get transaction by message hash")
+            response2 = rq.get(f'{self.indexer_url}/api/v3/transactionsByMessage', 
+                          params={'api_key': self.indexer_key,
+                                  'msg_hash': hash,
+                                  },
+                          headers = self.headers)
+            response2.raise_for_status()
+            if len(response2.json()['transactions']) > 0:
+                return response2.json()['transactions'][0]
+            else:
+                raise Exception (f"Cannot get transaction by hash {hash}")            
 
     def get_jetton_transaction_by_hash(self, hash, jetton_master):
         tx_lt = int(self.get_transaction_by_hash(hash)['lt'])
